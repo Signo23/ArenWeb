@@ -1,0 +1,10 @@
+<main>
+    <arn-aren [playerListener]="player"></arn-aren>
+    @for (blockInfo of blocks; track blockInfo.x) {
+    <arn-block [blockInfo]="blockInfo"></arn-block>
+    }
+    <p>
+        X:{{player.value.x}} Y:{{player.value.y}}
+        X-E: {{player.value.x + player.value.width}} Y-E: {{player.value.y + player.value.height}}
+    </p>
+</main>
