@@ -1,34 +1,20 @@
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observer, Subscription} from "rxjs";
 import {ElementInfo} from "../model/element-info";
 
 export class ElementBehaviorSubject extends BehaviorSubject<ElementInfo>{
-    constructor() {
-        super(new ElementInfo());
-    }
-    public setX(x: number): void{
-        this.next({
-            ...this.value,
-            x: x,
-        });
-    }
-    public setY(y: number): void{
-        this.next({
-            ...this.value,
-            y: y,
-        });
+    constructor(element?: ElementInfo) {
+        super(element == null ? new ElementInfo() : element);
     }
 
-    public setWidth(width: number): void{
-        this.next({
-            ...this.value,
-            width: width,
-        });
+    public setNewPosition(x: number, y: number){
+      this.next(new ElementInfo(x, y));
     }
 
-    public setHeight(height: number): void{
-        this.next({
-            ...this.value,
-            height: height,
-        });
+    public updatePositionByCurrentScreenSize(oldWidth: number, oldHeight: number){
+      let xRatio = this.value.x * 100 / oldWidth;
+      let yRatio = this.value.y * 100 / oldHeight;
+      let newX = window.innerWidth * xRatio / 100;
+      let newY = window.innerHeight * yRatio / 100;
+      this.next(new ElementInfo(newX, newY, this.value.visible));
     }
 }

@@ -1,32 +1,34 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {ArenComponent} from "../aren/aren.component";
 import {ElementBehaviorSubject} from "../../controller/element-behavior-subject";
-import {ElementInfo, ElementInfos} from "../../model/element-info";
+import {ElementInfo} from "../../model/element-info";
 import {BlockComponent} from "../block/block.component";
+import {NgStyle} from "@angular/common";
 
 @Component({
   selector: 'arn-level',
   standalone: true,
   imports: [
     ArenComponent,
-    BlockComponent
+    BlockComponent,
+    NgStyle
   ],
   templateUrl: './level.component.html',
   styleUrl: './level.component.css'
 })
 export class LevelComponent {
+  @ViewChild('level') level: ElementRef | undefined;
   private readonly VELOCITY: number = 15;
   protected player: ElementBehaviorSubject;
-  protected blocks: ElementInfo[];
+  protected blocks: ElementBehaviorSubject[];
+  protected image = "url('../../../assets/level-one.png')";
   private screenDimension: {x: number, y: number};
   constructor() {
     this.player = new ElementBehaviorSubject();
-    this.screenDimension = {x:1, y: 1};
-    this.blocks = [{x: 100, y: 100, width: 10, height: 10, visible: true}];
+    this.screenDimension = {x:window.innerWidth, y: window.innerHeight};
+    this.blocks = [new ElementBehaviorSubject(new ElementInfo(100, 100, true))];
   }
-  @HostListener('document:keydown', ['$event'])
-  test(e:KeyboardEvent){
-    console.log(e.code);
+  @HostListener('document:keydown', ['$event']) test(e:KeyboardEvent){
     const position: ElementInfo = this.player.value;
     let delta: number = this.VELOCITY;
     let x = position.x;
@@ -36,34 +38,29 @@ export class LevelComponent {
     }
     if(e.code == "KeyD" || e.code == "KeyA"){
       x += delta;
-      x = x < 0 ? position.x : (x > this.screenDimension.x - position.width ? position.x : x);
+      x = x < 0 ? position.x : (x > this.screenDimension.x - position.getWidth() ? position.x : x);
     }
     if(e.code == "KeyW" || e.code == "KeyS"){
       y += delta;
-      y = y < 0 ? position.y : y > this.screenDimension.y - position.height ? position.y : y;
+      y = y < 0 ? position.y : y > this.screenDimension.y - position.getHeight() ? position.y : y;
     }
     const interacts = this.blocks
-        .filter(block => ElementInfos.interacts({
-          ...this.player.value,
-          x: x,
-          y: y,
-        }, block)).length > 0;
+        .filter(block => {
+          return new ElementInfo(x, y).interacts(block.value)
+        }).length > 0;
     if(!interacts){
-      this.player.setX(x);
-      this.player.setY(y);
+      this.player.setNewPosition(x, y);
     }
   }
 
   @HostListener('window:resize', ['$event'])
   @HostListener('document:DOMContentLoaded', ['$event'])
   updateScreenLimits(): void{
-    let x = this.player.value.x * 100 / this.screenDimension.x;
-    let y = this.player.value.y * 100 / this.screenDimension.y;
+    this.player.updatePositionByCurrentScreenSize(this.screenDimension.x, this.screenDimension.y);
+    this.blocks
+      .forEach(block => block.updatePositionByCurrentScreenSize(this.screenDimension.x,
+        this.screenDimension.y))
     this.screenDimension.x = window.innerWidth;
     this.screenDimension.y = window.innerHeight;
-    let newX = this.screenDimension.x * x / 100;
-    let newY = this.screenDimension.y * y / 100;
-    this.player.setX(newX);
-    this.player.setY(newY);
   }
 }

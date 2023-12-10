@@ -1,10 +1,10 @@
-<main>
+<main #level [ngStyle]="{'background-image': image}">
     <arn-aren [playerListener]="player"></arn-aren>
-    @for (blockInfo of blocks; track blockInfo.x) {
+    @for(blockInfo of blocks; track blockInfo.value.x) {
     <arn-block [blockInfo]="blockInfo"></arn-block>
     }
     <p>
         X:{{player.value.x}} Y:{{player.value.y}}
-        X-E: {{player.value.x + player.value.width}} Y-E: {{player.value.y + player.value.height}}
+        X-E:{{player.value.x + player.value.getWidth()}} Y-E:{{player.value.y + player.value.getHeight()}}
     </p>
 </main>
