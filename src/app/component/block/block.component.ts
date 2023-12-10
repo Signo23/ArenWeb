@@ -1,5 +1,5 @@
 import {Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
-import {ElementInfo} from "../model/element-info";
+import {ElementInfo} from "../../model/element-info";
 
 @Component({
   selector: 'arn-block',

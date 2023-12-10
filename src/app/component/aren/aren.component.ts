@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {ElementBehaviorSubject} from "../controller/element-behavior-subject";
-import {ElementInfo} from "../model/element-info";
+import {ElementBehaviorSubject} from "../../controller/element-behavior-subject";
+import {ElementInfo} from "../../model/element-info";
 
 @Component({
   selector: 'arn-aren',

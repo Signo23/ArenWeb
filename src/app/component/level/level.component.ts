@@ -1,7 +1,7 @@
 import {Component, HostListener} from '@angular/core';
 import {ArenComponent} from "../aren/aren.component";
-import {ElementBehaviorSubject} from "../controller/element-behavior-subject";
-import {ElementInfo, ElementInfos} from "../model/element-info";
+import {ElementBehaviorSubject} from "../../controller/element-behavior-subject";
+import {ElementInfo, ElementInfos} from "../../model/element-info";
 import {BlockComponent} from "../block/block.component";
 
 @Component({
