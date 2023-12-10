@@ -1,15 +1,1 @@
-p{
-    color: white;
-    z-index: 10;
-    position: absolute;
-    text-shadow: darkgray 1px 1px 1px;
-    border: dotted darkgray;
-    padding: 0.5%;
-    font-family: "Apple SD Gothic Neo", serif;
-}
-main{
-    background-image: url("../assets/level-one.png");
-    background-size: 100% 100%;
-    height: 100%;
-    image-rendering: pixelated;
-}
+
